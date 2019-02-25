@@ -11,3 +11,39 @@ function getRandomColor() {
 }
 
 // напишем функцию getData
+
+function getData() {
+  // fetch(API).then( (response) => {
+  //   // console.log(response);
+  //   return response;
+  axios.get(API)
+  .then( result => {
+    // console.log(result.text());
+    return result.data; 
+  }).then(value => {
+    return JSON.parse(value.slice(2, -1));
+  }).then(json => {
+    document.body.style.background = getRandomColor();
+    console.log(json);
+    article.innerHTML = `
+    <p id="text">${json.quoteText}</p>
+    ${json.quoteAuthor ? `
+    <p id="author">${json.quoteAuthor}<p>` : ""}`; // автро есть не всегда с помощью интерполяции
+    // return json;
+    // share actions
+    shareButton.setAttribute('href', shareTwitter + json.quoteText);
+  }).catch( err => {
+    throw err
+  })
+}
+
+getData();
+
+newArticleButton.addEventListener('click', () => {
+  getData();
+})
+
+// shareButton.addEventListener('click', (e) => {
+//   e.preventDefault();
+
+// })
